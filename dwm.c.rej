@@ -1,0 +1,26 @@
+--- dwm.c	2012-11-12 23:04:14.383441523 -0600
++++ dwm.c.orig	2011-12-19 09:02:46.000000000 -0600
+@@ -54,7 +54,6 @@
+ #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
+ #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+ #define TEXTW(X)                (textnw(X, strlen(X)) + dc.font.height)
+-#define STATUS_BUF_LEN          8192 //la11111
+ 
+ /* enums */
+ enum { CurNormal, CurResize, CurMove, CurLast };        /* cursor */
+@@ -742,8 +723,13 @@
+ 	dc.x += dc.w;
+ 	x = dc.x;
+ 	if(m == selmon) { /* status is only drawn on selected monitor */
+-
+-       drawstatus(m); //la11111
++		dc.w = TEXTW(stext);
++		dc.x = m->ww - dc.w;
++		if(dc.x < x) {
++			dc.x = x;
++			dc.w = m->ww - x;
++		}
++		drawtext(stext, dc.norm, False);
+ 	}
+ 	else
+ 		dc.x = m->ww;
